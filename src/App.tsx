@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { ReactElement } from "react";
 import './App.css';
 
-function App() {
+interface Props {}
+
+export default function App({}: Props): ReactElement {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React 2
-        </a>
-      </header>
+    <div className = "grid">
+      <div className = "grid-3">
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+      </div>
+      <div className = "grid-3">
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+      </div>
+      <div className = "grid-3">
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+        <div className = "grid-item"></div>
+      </div>
     </div>
   );
 }
-
-export default App;
