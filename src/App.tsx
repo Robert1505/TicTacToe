@@ -7,17 +7,22 @@ export default function App({}: Props): ReactElement {
   const [cellsContent, setCellsContent] = useState<string[]>(
     new Array(9).fill("")
   );
+  const [nextChar, setNextChar] = useState("X");
 
-  const fillCell = (cellIndex: number, char: string) => {
+  const fillCell = (cellIndex: number) => {
     const newCellsContent = [...cellsContent];
-    newCellsContent[cellIndex] = char;
+    newCellsContent[cellIndex] = nextChar;
+    // if X is was the previous char, set the next one to O
+    // otherwise, set the next to X
+    if(nextChar === "X") setNextChar("O")
+    else setNextChar("X");
 
     setCellsContent(newCellsContent);
   };
 
   const renderGridItem = (cellIndex: number) => {
     return (
-      <div className="grid-item" onClick={() => fillCell(cellIndex, "X")}>
+      <div className="grid-item" onClick={() => fillCell(cellIndex)}>
         {cellsContent[cellIndex]}
       </div>
     );
