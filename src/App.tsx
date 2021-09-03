@@ -38,12 +38,35 @@ export default function App({}: Props): ReactElement {
     );
   };
 
-  const checkGameState = () => {
+  const checkRow = (rowIndex: number): boolean => {
+    const startIndex = rowIndex * 3;
     if (
-      cellsContent[0] === cellsContent[1] &&
-      cellsContent[1] === cellsContent[2] &&
-      cellsContent[0] !== ""
+      cellsContent[startIndex] === cellsContent[startIndex + 1] &&
+      cellsContent[startIndex + 1] === cellsContent[startIndex + 2] &&
+      cellsContent[startIndex] !== ""
     ) {
+      return true;
+    }
+    return false;
+  };
+
+  const checkColumn = (columnIndex: number): boolean => {
+    const startIndex = columnIndex;
+    if (
+      cellsContent[startIndex] === cellsContent[startIndex + 3] &&
+      cellsContent[startIndex] === cellsContent[startIndex + 6] &&
+      cellsContent[startIndex] !== ""
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const checkGameState = () => {
+    if (checkRow(0) || checkRow(1) || checkRow(2)) {
+      setGameState(GameState.WON);
+    }
+    if(checkColumn(0) || checkColumn(1) || checkColumn(2)){
       setGameState(GameState.WON);
     }
   };
@@ -55,20 +78,13 @@ export default function App({}: Props): ReactElement {
           Player <span className="character">{nextChar}</span>'s turn!
         </>
       );
-    if(GameState.WON === gameState)
-      return(
-        <>
-          Game Won!
-        </>
-      )
+    if (GameState.WON === gameState) return <>Game Won!</>;
   };
 
   return (
     <div className="background">
       <div className="grid">
-        <div className="text">
-          {renderText()}
-        </div>
+        <div className="text">{renderText()}</div>
         <div className="grid-3">
           {renderGridItem(0)}
           {renderGridItem(1)}
