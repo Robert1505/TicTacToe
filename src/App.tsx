@@ -17,8 +17,8 @@ export default function App({}: Props): ReactElement {
   const [gameState, setGameState] = useState(GameState.IN_PROGRESS);
 
   const fillCell = (cellIndex: number) => {
+    if(gameState !== GameState.IN_PROGRESS) return;
     if (cellsContent[cellIndex] !== "") return;
-
     const newCellsContent = [...cellsContent];
     newCellsContent[cellIndex] = nextChar;
     setCellsContent(newCellsContent);
