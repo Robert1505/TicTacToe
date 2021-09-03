@@ -62,6 +62,12 @@ export default function App({}: Props): ReactElement {
     return false;
   };
 
+  const checkDiagonals = () => {
+    if(cellsContent[0] === cellsContent[4] && cellsContent[0] === cellsContent[8] && cellsContent[0] !== "") return true;
+    if(cellsContent[2] === cellsContent[4] && cellsContent[2] === cellsContent[6] && cellsContent[2] !== "") return true;
+
+  }
+
   const checkGameState = () => {
     if (checkRow(0) || checkRow(1) || checkRow(2)) {
       setGameState(GameState.WON);
@@ -69,6 +75,7 @@ export default function App({}: Props): ReactElement {
     if(checkColumn(0) || checkColumn(1) || checkColumn(2)){
       setGameState(GameState.WON);
     }
+    if(checkDiagonals()) setGameState(GameState.WON);
   };
 
   const renderText = () => {
