@@ -63,19 +63,37 @@ export default function App({}: Props): ReactElement {
   };
 
   const checkDiagonals = () => {
-    if(cellsContent[0] === cellsContent[4] && cellsContent[0] === cellsContent[8] && cellsContent[0] !== "") return true;
-    if(cellsContent[2] === cellsContent[4] && cellsContent[2] === cellsContent[6] && cellsContent[2] !== "") return true;
+    if (
+      cellsContent[0] === cellsContent[4] &&
+      cellsContent[0] === cellsContent[8] &&
+      cellsContent[0] !== ""
+    )
+      return true;
+    if (
+      cellsContent[2] === cellsContent[4] &&
+      cellsContent[2] === cellsContent[6] &&
+      cellsContent[2] !== ""
+    )
+      return true;
+  };
+  const checkDraw = () => {
+    return cellsContent.findIndex((x) => x === "") === -1 && gameState !== GameState.WON;
 
-  }
+    // let ok: boolean = true;
+    // for (let i = 0; i < 9; i++) if (cellsContent[i] === "") ok = false;
+    // if (ok === true && gameState !== GameState.WON) return true;
+    // return false;
+  };
 
   const checkGameState = () => {
     if (checkRow(0) || checkRow(1) || checkRow(2)) {
       setGameState(GameState.WON);
     }
-    if(checkColumn(0) || checkColumn(1) || checkColumn(2)){
+    if (checkColumn(0) || checkColumn(1) || checkColumn(2)) {
       setGameState(GameState.WON);
     }
-    if(checkDiagonals()) setGameState(GameState.WON);
+    if (checkDiagonals()) setGameState(GameState.WON);
+    if (checkDraw()) setGameState(GameState.DRAW);
   };
 
   const renderText = () => {
@@ -86,6 +104,7 @@ export default function App({}: Props): ReactElement {
         </>
       );
     if (GameState.WON === gameState) return <>Game Won!</>;
+    if (GameState.DRAW === gameState) return <>Draw!</>;
   };
 
   return (
