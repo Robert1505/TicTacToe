@@ -13,7 +13,7 @@ export default function App({}: Props): ReactElement {
   const [cellsContent, setCellsContent] = useState<string[]>(
     new Array(9).fill("")
   );
-  const [nextChar, setNextChar] = useState("X");
+  const [nextChar, setNextChar] = useState("O");
   const [gameState, setGameState] = useState(GameState.IN_PROGRESS);
 
   const fillCell = (cellIndex: number) => {
@@ -21,8 +21,6 @@ export default function App({}: Props): ReactElement {
 
     const newCellsContent = [...cellsContent];
     newCellsContent[cellIndex] = nextChar;
-    if (nextChar === "X") setNextChar("O");
-    else setNextChar("X");
     setCellsContent(newCellsContent);
   };
 
@@ -63,19 +61,52 @@ export default function App({}: Props): ReactElement {
   };
 
   const checkDiagonals = () => {
-    if(cellsContent[0] === cellsContent[4] && cellsContent[0] === cellsContent[8] && cellsContent[0] !== "") return true;
-    if(cellsContent[2] === cellsContent[4] && cellsContent[2] === cellsContent[6] && cellsContent[2] !== "") return true;
+    if (
+      cellsContent[0] === cellsContent[4] &&
+      cellsContent[0] === cellsContent[8] &&
+      cellsContent[0] !== ""
+    )
+      return true;
+    if (
+      cellsContent[2] === cellsContent[4] &&
+      cellsContent[2] === cellsContent[6] &&
+      cellsContent[2] !== ""
+    )
+      return true;
+  };
+  const checkDraw = () => {
+    return (
+      cellsContent.findIndex((x) => x === "") === -1 &&
+      gameState !== GameState.WON
+    );
 
-  }
+    // let ok: boolean = true;
+    // for (let i = 0; i < 9; i++) if (cellsContent[i] === "") ok = false;
+    // if (ok === true && gameState !== GameState.WON) return true;
+    // return false;
+  };
 
   const checkGameState = () => {
     if (checkRow(0) || checkRow(1) || checkRow(2)) {
       setGameState(GameState.WON);
+      return;
     }
-    if(checkColumn(0) || checkColumn(1) || checkColumn(2)){
+    if (checkColumn(0) || checkColumn(1) || checkColumn(2)) {
       setGameState(GameState.WON);
+      return;
     }
-    if(checkDiagonals()) setGameState(GameState.WON);
+    if (checkDiagonals()) {
+      setGameState(GameState.WON);
+      return;
+    }
+    if (checkDraw()) {
+      setGameState(GameState.DRAW);
+      return;
+    }
+
+    if (gameState === GameState.IN_PROGRESS)
+      if (nextChar === "X") setNextChar("O");
+      else setNextChar("X");
   };
 
   const renderText = () => {
@@ -85,7 +116,8 @@ export default function App({}: Props): ReactElement {
           Player <span className="character">{nextChar}</span>'s turn!
         </>
       );
-    if (GameState.WON === gameState) return <>Game Won!</>;
+    if (GameState.WON === gameState) return <>Game Won by {nextChar}!</>;
+    if (GameState.DRAW === gameState) return <>Draw!</>;
   };
 
   return (
