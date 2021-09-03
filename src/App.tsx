@@ -1,17 +1,23 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import "./App.css";
 
 interface Props {}
+
+enum GameState {
+  IN_PROGRESS,
+  WON,
+  DRAW,
+}
 
 export default function App({}: Props): ReactElement {
   const [cellsContent, setCellsContent] = useState<string[]>(
     new Array(9).fill("")
   );
   const [nextChar, setNextChar] = useState("X");
+  const [gameState, setGameState] = useState(GameState.IN_PROGRESS);
 
   const fillCell = (cellIndex: number) => {
-    if (cellsContent[cellIndex] !== "") 
-      return;
+    if (cellsContent[cellIndex] !== "") return;
 
     const newCellsContent = [...cellsContent];
     newCellsContent[cellIndex] = nextChar;
@@ -19,6 +25,10 @@ export default function App({}: Props): ReactElement {
     else setNextChar("X");
     setCellsContent(newCellsContent);
   };
+
+  useEffect(() => {
+    checkGameState();
+  }, [cellsContent]);
 
   const renderGridItem = (cellIndex: number) => {
     return (
@@ -28,11 +38,36 @@ export default function App({}: Props): ReactElement {
     );
   };
 
+  const checkGameState = () => {
+    if (
+      cellsContent[0] === cellsContent[1] &&
+      cellsContent[1] === cellsContent[2] &&
+      cellsContent[0] !== ""
+    ) {
+      setGameState(GameState.WON);
+    }
+  };
+
+  const renderText = () => {
+    if (GameState.IN_PROGRESS === gameState)
+      return (
+        <>
+          Player <span className="character">{nextChar}</span>'s turn!
+        </>
+      );
+    if(GameState.WON === gameState)
+      return(
+        <>
+          Game Won!
+        </>
+      )
+  };
+
   return (
     <div className="background">
       <div className="grid">
         <div className="text">
-          Player <span className="character">{nextChar}</span>'s turn!
+          {renderText()}
         </div>
         <div className="grid-3">
           {renderGridItem(0)}
