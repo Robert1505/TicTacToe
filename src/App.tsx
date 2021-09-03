@@ -1,9 +1,10 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import "./App.css";
+import { checkColumn, checkDiagonals, checkDraw, checkRow } from "./Helpers";
 
 interface Props {}
 
-enum GameState {
+export enum GameState {
   IN_PROGRESS,
   WON,
   DRAW,
@@ -16,8 +17,13 @@ export default function App({}: Props): ReactElement {
   const [nextChar, setNextChar] = useState("O");
   const [gameState, setGameState] = useState(GameState.IN_PROGRESS);
 
+  const [score, setScore] = useState({
+    x: 0,
+    o: 0,
+  });
+
   const fillCell = (cellIndex: number) => {
-    if(gameState !== GameState.IN_PROGRESS) return;
+    if (gameState !== GameState.IN_PROGRESS) return;
     if (cellsContent[cellIndex] !== "") return;
     const newCellsContent = [...cellsContent];
     newCellsContent[cellIndex] = nextChar;
@@ -36,70 +42,32 @@ export default function App({}: Props): ReactElement {
     );
   };
 
-  const checkRow = (rowIndex: number): boolean => {
-    const startIndex = rowIndex * 3;
-    if (
-      cellsContent[startIndex] === cellsContent[startIndex + 1] &&
-      cellsContent[startIndex + 1] === cellsContent[startIndex + 2] &&
-      cellsContent[startIndex] !== ""
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  const checkColumn = (columnIndex: number): boolean => {
-    const startIndex = columnIndex;
-    if (
-      cellsContent[startIndex] === cellsContent[startIndex + 3] &&
-      cellsContent[startIndex] === cellsContent[startIndex + 6] &&
-      cellsContent[startIndex] !== ""
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  const checkDiagonals = () => {
-    if (
-      cellsContent[0] === cellsContent[4] &&
-      cellsContent[0] === cellsContent[8] &&
-      cellsContent[0] !== ""
-    )
-      return true;
-    if (
-      cellsContent[2] === cellsContent[4] &&
-      cellsContent[2] === cellsContent[6] &&
-      cellsContent[2] !== ""
-    )
-      return true;
-  };
-  const checkDraw = () => {
-    return (
-      cellsContent.findIndex((x) => x === "") === -1 &&
-      gameState !== GameState.WON
-    );
-
-    // let ok: boolean = true;
-    // for (let i = 0; i < 9; i++) if (cellsContent[i] === "") ok = false;
-    // if (ok === true && gameState !== GameState.WON) return true;
-    // return false;
+  const modifyScore = () => {
+    if (nextChar === "X") setScore({ ...score, x: score.x + 1 });
+    if (nextChar === "O") setScore({ ...score, o: score.o + 1 });
   };
 
   const checkGameState = () => {
-    if (checkRow(0) || checkRow(1) || checkRow(2)) {
+    if (
+      checkRow(cellsContent, 0) ||
+      checkRow(cellsContent, 1) ||
+      checkRow(cellsContent, 2)
+    ) {
       setGameState(GameState.WON);
+      modifyScore();
       return;
     }
-    if (checkColumn(0) || checkColumn(1) || checkColumn(2)) {
+    if (checkColumn(cellsContent, 0) || checkColumn(cellsContent, 1) || checkColumn(cellsContent, 2)) {
       setGameState(GameState.WON);
+      modifyScore();
       return;
     }
-    if (checkDiagonals()) {
+    if (checkDiagonals(cellsContent)) {
       setGameState(GameState.WON);
+      modifyScore();
       return;
     }
-    if (checkDraw()) {
+    if (checkDraw(cellsContent, gameState)) {
       setGameState(GameState.DRAW);
       return;
     }
@@ -107,6 +75,20 @@ export default function App({}: Props): ReactElement {
     if (gameState === GameState.IN_PROGRESS)
       if (nextChar === "X") setNextChar("O");
       else setNextChar("X");
+  };
+
+  const restartGame = () => {
+    setCellsContent(new Array(9).fill(""));
+    setGameState(GameState.IN_PROGRESS);
+  };
+
+  const renderRestartButton = () => {
+    if (gameState !== GameState.IN_PROGRESS)
+      return (
+        <>
+          <button onClick={restartGame}>restart</button>
+        </>
+      );
   };
 
   const renderText = () => {
@@ -123,6 +105,10 @@ export default function App({}: Props): ReactElement {
   return (
     <div className="background">
       <div className="grid">
+        <div>
+          <span>X: {score.x}</span>
+          <span>O: {score.o}</span>
+        </div>
         <div className="text">{renderText()}</div>
         <div className="grid-3">
           {renderGridItem(0)}
@@ -140,6 +126,7 @@ export default function App({}: Props): ReactElement {
           {renderGridItem(8)}
         </div>
       </div>
+      <div>{renderRestartButton()}</div>
     </div>
   );
 }
