@@ -3,7 +3,7 @@
 }
 .text{
   text-align: center;
-  margin-bottom: 85px;
+  margin-bottom: 45px;
   font-family: 'Poppins', sans-serif;
   font-size: 50px;
   color: black;
@@ -37,4 +37,60 @@
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
+}
+.score{
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  font-size: 35px;
+}
+.scorex{
+  margin-right: 100px;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Raleway:500");
+
+.restartButton {
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #FD5200 0%, #FE621D 50%, #FFBE0B 100%);
+  background-size: 500%;
+  border: none;
+  border-radius: 5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font: 1.5em Raleway, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 4rem;
+  letter-spacing: 0.05em;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 14rem;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.restartButton:hover {
+  animation-name: gradient;
+  -webkit-animation-name: gradient;
+  animation-duration: 2s;
+  -webkit-animation-duration: s;
+  animation-iteration-count: 1;
+  -webkit-animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100%;
+  }
 }
