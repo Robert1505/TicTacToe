@@ -86,7 +86,7 @@ export default function App({}: Props): ReactElement {
     if (gameState !== GameState.IN_PROGRESS)
       return (
         <>
-          <button onClick={restartGame}>restart</button>
+          <button className = "restartButton" onClick={restartGame}>Restart</button>
         </>
       );
   };
@@ -105,11 +105,12 @@ export default function App({}: Props): ReactElement {
   return (
     <div className="background">
       <div className="grid">
-        <div>
-          <span>X: {score.x}</span>
+        <div className = "score">
+          <span className = "scorex">X: {score.x}</span>
           <span>O: {score.o}</span>
         </div>
         <div className="text">{renderText()}</div>
+        <div>{renderRestartButton()}</div>
         <div className="grid-3">
           {renderGridItem(0)}
           {renderGridItem(1)}
@@ -126,7 +127,7 @@ export default function App({}: Props): ReactElement {
           {renderGridItem(8)}
         </div>
       </div>
-      <div>{renderRestartButton()}</div>
+     
     </div>
   );
 }
